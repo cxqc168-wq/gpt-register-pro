@@ -8,6 +8,12 @@
 
 GPT Register Pro 是一个开源的 ChatGPT / Codex 账号自动化注册工具。它通过本地浏览器自动化，串联接码平台手机号验证、临时邮箱接收验证码、OpenAI OAuth 授权换取 Codex Session Token 全流程，支持桌面图形界面和命令行两种运行方式。
 
+## 界面预览
+
+![GPT Register Pro 桌面控制台](./docs/screenshots/desktop-console.png)
+
+桌面控制台包含六大功能页：控制台（运行与日志）、后台配置（接口与浏览器）、接码配置（服务商与号码价格）、Outlook 邮箱池（卡密导入与管理）、账号信息（注册账号与验证码）、Token 状态（可用性检测）。
+
 ## 接码平台注册链接
 
 本项目支持三家接码平台，注册后获取 API Key 即可使用：
