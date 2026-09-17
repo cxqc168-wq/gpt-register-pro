@@ -1,0 +1,92 @@
+{
+  "name": "gpt-register-pro",
+  "version": "1.0.0",
+  "description": "GPT Register Pro - 多平台接码 + 临时邮箱 + OpenAI OAuth 自动化注册桌面控制台",
+  "main": "desktop/main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cli": "node index.js",
+    "check:desktop": "node --check desktop/main.js && node --check desktop/preload.js && node --check desktop/renderer/app.js",
+    "dist": "electron-builder --win",
+    "dist:portable": "electron-builder --win portable",
+    "dist:nsis": "electron-builder --win nsis",
+    "dist:msi": "electron-builder --win msi"
+  },
+  "keywords": [
+    "codex",
+    "browserbase",
+    "ddg",
+    "registration"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.6",
+    "dotenv": "^16.4.7",
+    "https-proxy-agent": "^9.1.0",
+    "imapflow": "^1.7.8",
+    "puppeteer-core": "^24.40.0",
+    "puppeteer-real-browser": "^1.4.4",
+    "socks-proxy-agent": "^10.1.0",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "electron": "^42.5.0",
+    "electron-builder": "^26.15.3"
+  },
+  "build": {
+    "appId": "com.gptregister.pro",
+    "productName": "GPT Register Pro",
+    "asar": false,
+    "npmRebuild": false,
+    "directories": {
+      "output": "desktop-release"
+    },
+    "files": [
+      "desktop/**/*",
+      "src/**/*",
+      "index.js",
+      "cloudflare-email-worker.js",
+      "cloudflare-email-worker-schema.sql",
+      "config.example.json",
+      "package.json",
+      "node_modules/**/*"
+    ],
+    "extraMetadata": {
+      "main": "desktop/main.js"
+    },
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "msi",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "GPT Register Pro",
+      "artifactName": "${productName}-${version}-${arch}-setup.${ext}"
+    },
+    "msi": {
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-${arch}-portable.${ext}"
+    }
+  }
+}

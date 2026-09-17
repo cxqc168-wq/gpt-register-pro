@@ -1,0 +1,11 @@
+name = "mail-worker"
+main = "cloudflare-email-worker.js"
+compatibility_date = "2026-08-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "mail_db"
+database_id = "12b1db5e-d0c5-4f20-97d1-8cd4e2b97ba8"
+
+[vars]
+MAIL_DOMAIN = "ai168vip.top"
