@@ -6,6 +6,7 @@ const { createSmsProvider, getActiveSmsProviderType, getActiveSmsService, getAct
 const { MailProvider } = require('../src/mailProvider');
 const { normalizePhoneCountries, DEFAULT_PHONE_COUNTRIES } = require('../src/phoneCountryCatalog');
 const { OutlookPool, OutlookMailClient, isPlaceholderRefreshToken } = require('../src/outlookProvider');
+const { checkLicense, activateLicense, collectMachineId, STATUS, EXPECTED_CODE } = require('../src/licenseGuard');
 
 // Windows 控制台默认代码页为 GBK(936)，而 Electron 主进程的 console 输出是 UTF-8 字节，
 // 终端会按 GBK 解码，导致中文日志乱码。这里把控制台切换到 UTF-8 代码页，保证日志正常显示。
@@ -544,6 +545,26 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
+ipcMain.handle('license:status', async () => {
+  const result = checkLicense();
+  return {
+    ...result,
+    valid: result.status === STATUS.OK,
+    machineId: collectMachineId(),
+    expectedCode: EXPECTED_CODE,
+  };
+});
+
+ipcMain.handle('license:activate', async (_event, incoming = {}) => {
+  const code = String(incoming.code || '').trim();
+  const result = await activateLicense(code);
+  return {
+    ...result,
+    valid: result.status === STATUS.OK,
+    machineId: collectMachineId(),
+  };
+});
+
 ipcMain.handle('app:summary', async () => {
   const config = safeConfig(readJson(configPath, {}));
   return { projectRoot, configPath, config, issues: validateConfig(config), counts: getDisplayCounts(config), isRunning: !!activeRun, logs: lastLogLines };
@@ -852,6 +873,10 @@ ipcMain.handle('outlook:pick-file', async () => {
 });
 
 ipcMain.handle('runtime:start', async (_event, options = {}) => {
+  const lic = checkLicense();
+  if (lic.status !== STATUS.OK) {
+    return { ok: false, message: `未激活授权：${lic.message || '请先激活软件'}` };
+  }
   if (activeRun) return { ok: false, message: '已有任务正在运行，请先停止或等待完成' };
   const config = safeConfig(readJson(configPath, {}));
   const mode = String(options.mode || 'full');

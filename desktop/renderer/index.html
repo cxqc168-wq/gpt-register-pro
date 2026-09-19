@@ -30,6 +30,10 @@
           <small id="issueText">配置检查中</small>
         </div>
       </div>
+      <button class="license-status-btn" id="licenseStatusBtn" type="button">
+        <span class="license-dot" id="licenseDot"></span>
+        <span id="licenseStatusText">授权检测中...</span>
+      </button>
       <button class="author-button" id="authorBtn" type="button">作者</button>
     </aside>
 
@@ -403,6 +407,13 @@
           <p class="author-qr-hint">微信扫一扫，感谢您的支持</p>
         </div>
         <div class="author-links">
+          <a class="author-link-card" href="https://zzpole.com/" target="_blank" rel="noopener noreferrer">
+            <img class="author-link-icon" src="assets/blog-logo.svg" alt="博客" />
+            <div>
+              <strong>作者博客</strong>
+              <small>zzpole.com</small>
+            </div>
+          </a>
           <a class="author-link-card" href="https://github.com/cxqc168-wq" target="_blank" rel="noopener noreferrer">
             <img class="author-link-icon" src="assets/github-logo.webp" alt="GitHub" />
             <div>
@@ -417,6 +428,72 @@
               <small>群号：1026291994</small>
             </div>
           </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 软件授权激活锁模态框 -->
+  <div class="modal-overlay modal-lock" id="activationModal" hidden>
+    <div class="modal-card activation-modal-card" role="dialog" aria-modal="true" aria-labelledby="activationTitle">
+      <div class="activation-layout">
+        <!-- 左侧：QQ群与网站引流 -->
+        <div class="activation-left-panel">
+          <div class="activation-qr-card">
+            <div class="activation-qq-avatar">
+              <img src="assets/qq-logo.svg" alt="QQ交流群" />
+            </div>
+            <div class="activation-qq-info">
+              <div class="activation-guide-title">加入QQ群看激活码</div>
+              <div class="activation-guide-desc">官方交流群：1026291994</div>
+              <div class="activation-guide-sub">在群公告中可免费获取激活码</div>
+            </div>
+          </div>
+          <a class="activation-website-btn" href="https://zzpole.com/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <span>访问网站看激活码</span>
+          </a>
+        </div>
+
+        <!-- 右侧：激活表单与机器码 -->
+        <div class="activation-right-panel">
+          <div class="activation-header">
+            <div class="activation-icon-badge">
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+            </div>
+            <div>
+              <h3 id="activationTitle">软件使用授权锁</h3>
+              <p class="modal-subtitle">授权绑定当前设备，请输入激活码激活使用</p>
+            </div>
+          </div>
+
+          <div class="activation-form">
+            <div class="form-group">
+              <label class="form-label" for="activationMachineId">设备机器码（自动识别）</label>
+              <div class="copy-input-group">
+                <input type="text" id="activationMachineId" class="text-input text-sm" readonly />
+                <button type="button" class="ghost-button small" id="copyMachineIdBtn">复制机器码</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="activationCodeInput">激活码</label>
+              <input type="text" id="activationCodeInput" class="text-input" placeholder="请输入激活码（例如：CXQC0168）" spellcheck="false" autocomplete="off" />
+            </div>
+
+            <div class="activation-actions">
+              <button type="button" class="primary-button full-width" id="activationSubmitBtn">立即激活</button>
+            </div>
+
+            <div class="activation-message" id="activationMessage"></div>
+          </div>
         </div>
       </div>
     </div>

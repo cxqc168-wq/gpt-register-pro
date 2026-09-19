@@ -808,6 +808,90 @@ function closeAuthorModal() {
   $('#authorModal').hidden = true;
 }
 
+// 授权激活锁逻辑
+async function checkLicenseGuard(forceShow = false) {
+  const modal = $('#activationModal');
+  const machineInput = $('#activationMachineId');
+  const msgEl = $('#activationMessage');
+  const codeInput = $('#activationCodeInput');
+  const statusText = $('#licenseStatusText');
+  const statusDot = $('#licenseDot');
+
+  try {
+    const status = await api.getLicenseStatus();
+    if (status.valid) {
+      if (statusText) statusText.textContent = '已授权';
+      if (statusDot) statusDot.className = 'license-dot ok';
+      if (!forceShow) {
+        modal.hidden = true;
+        return;
+      }
+    } else {
+      if (statusText) statusText.textContent = '未激活';
+      if (statusDot) statusDot.className = 'license-dot';
+    }
+
+    modal.hidden = false;
+    if (machineInput) machineInput.value = status.machineId || '';
+    if (msgEl) {
+      msgEl.textContent = status.valid ? '已授权，可正常使用全部功能' : (status.message || '软件需要激活，请输入激活码');
+      msgEl.className = status.valid ? 'activation-message success' : 'activation-message info';
+    }
+    if (codeInput) {
+      codeInput.value = '';
+      setTimeout(() => codeInput.focus(), 100);
+    }
+  } catch (e) {
+    console.warn('获取授权状态失败', e);
+  }
+}
+
+async function handleActivationSubmit() {
+  const codeInput = $('#activationCodeInput');
+  const submitBtn = $('#activationSubmitBtn');
+  const msgEl = $('#activationMessage');
+  const statusText = $('#licenseStatusText');
+  const statusDot = $('#licenseDot');
+  const code = (codeInput.value || '').trim();
+  if (!code) {
+    msgEl.textContent = '请输入激活码';
+    msgEl.className = 'activation-message error';
+    codeInput.focus();
+    return;
+  }
+  submitBtn.disabled = true;
+  codeInput.disabled = true;
+  msgEl.textContent = '正在连接服务器验证激活码...';
+  msgEl.className = 'activation-message info';
+
+  try {
+    const res = await api.activateLicense(code);
+    if (res.valid) {
+      msgEl.textContent = '激活成功！欢迎使用';
+      msgEl.className = 'activation-message success';
+      if (statusText) statusText.textContent = '已授权';
+      if (statusDot) statusDot.className = 'license-dot ok';
+      toast('激活成功！');
+      setTimeout(() => {
+        $('#activationModal').hidden = true;
+        submitBtn.disabled = false;
+        codeInput.disabled = false;
+      }, 700);
+    } else {
+      msgEl.textContent = res.message || '激活失败，请检查激活码或网络连接';
+      msgEl.className = 'activation-message error';
+      submitBtn.disabled = false;
+      codeInput.disabled = false;
+      codeInput.focus();
+    }
+  } catch (err) {
+    msgEl.textContent = err.message || '激活请求异常';
+    msgEl.className = 'activation-message error';
+    submitBtn.disabled = false;
+    codeInput.disabled = false;
+  }
+}
+
 async function copyOutlookCard() {
   if (!currentOutlookDetail) return;
   const d = currentOutlookDetail;
@@ -1056,6 +1140,39 @@ function bindEvents() {
   $('#authorModal').addEventListener('click', (event) => {
     if (event.target === $('#authorModal')) closeAuthorModal();
   });
+
+  // 授权激活锁事件
+  const licenseBtn = $('#licenseStatusBtn');
+  if (licenseBtn) {
+    licenseBtn.addEventListener('click', () => checkLicenseGuard(true));
+  }
+  const copyMachineBtn = $('#copyMachineIdBtn');
+  if (copyMachineBtn) {
+    copyMachineBtn.addEventListener('click', async () => {
+      const machineId = $('#activationMachineId')?.value || '';
+      if (!machineId) return;
+      try {
+        await navigator.clipboard.writeText(machineId);
+        toast('机器码已复制');
+      } catch {
+        toast('复制失败，请手动选取复制');
+      }
+    });
+  }
+  const activationSubmitBtn = $('#activationSubmitBtn');
+  if (activationSubmitBtn) {
+    activationSubmitBtn.addEventListener('click', handleActivationSubmit);
+  }
+  const activationCodeInput = $('#activationCodeInput');
+  if (activationCodeInput) {
+    activationCodeInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleActivationSubmit();
+      }
+    });
+  }
+
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
     if (!$('#outlookMailsModal').hidden) closeOutlookMailsModal();
@@ -1094,6 +1211,7 @@ window.__setDesktopView = setView;
 
 async function boot() {
   bindEvents();
+  await checkLicenseGuard();
   await refreshSummary();
   const initialView = ['console', 'config', 'sms', 'outlook', 'accounts', 'token-status'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'console';
   setView(initialView);

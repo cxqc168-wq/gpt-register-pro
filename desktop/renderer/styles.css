@@ -522,6 +522,35 @@ tbody tr:hover { background: rgba(47,157,131,.07); }
   background: rgba(255, 255, 255, .8);
 }
 
+.license-status-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--ink);
+  transition: all 0.2s ease;
+  margin-bottom: 6px;
+}
+.license-status-btn:hover {
+  background: #ffffff;
+  border-color: var(--accent);
+}
+.license-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ef4444;
+  flex-shrink: 0;
+}
+.license-dot.ok {
+  background: #10b981;
+}
+
 /* 作者模态框 */
 .author-modal-card {
   width: min(460px, calc(100vw - 48px));
@@ -620,6 +649,172 @@ tbody tr:hover { background: rgba(47,157,131,.07); }
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* ===== 软件使用授权激活锁 ===== */
+.modal-lock {
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(10px);
+}
+.activation-modal-card {
+  width: 720px;
+  max-width: 95vw;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.activation-layout {
+  display: flex;
+  gap: 32px;
+  align-items: stretch;
+}
+.activation-left-panel {
+  flex: 0 0 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 28px;
+  border-right: 1px solid var(--line);
+  text-align: center;
+}
+.activation-qr-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  width: 100%;
+}
+.activation-qq-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+.activation-qq-avatar img {
+  width: 44px;
+  height: 44px;
+}
+.activation-guide-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.activation-guide-desc {
+  font-size: 12px;
+  color: #0284c7;
+  font-weight: 600;
+}
+.activation-guide-sub {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: 2px;
+}
+.activation-website-btn {
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #86efac;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.08);
+}
+.activation-website-btn:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+  color: #15803d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.16);
+}
+.activation-right-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.activation-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.activation-icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #e0f2fe;
+  color: #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.activation-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.activation-header .modal-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+.activation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.copy-input-group {
+  display: flex;
+  gap: 8px;
+}
+.copy-input-group input {
+  font-family: monospace;
+  font-size: 12px;
+}
+.activation-actions {
+  margin-top: 4px;
+}
+.activation-message {
+  font-size: 12px;
+  min-height: 20px;
+  line-height: 20px;
+  text-align: center;
+}
+.activation-message.error {
+  color: #ef4444;
+  font-weight: 500;
+}
+.activation-message.success {
+  color: #10b981;
+  font-weight: 600;
+}
+.activation-message.info {
+  color: #64748b;
 }
 
 

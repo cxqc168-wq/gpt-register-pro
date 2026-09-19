@@ -2,6 +2,8 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('desktopApi', {
   getSummary: () => ipcRenderer.invoke('app:summary'),
+  getLicenseStatus: () => ipcRenderer.invoke('license:status'),
+  activateLicense: (code) => ipcRenderer.invoke('license:activate', { code }),
   resetStats: () => ipcRenderer.invoke('stats:reset'),
   saveConfig: (config) => ipcRenderer.invoke('config:save', config),
   openProjectFolder: () => ipcRenderer.invoke('config:open-folder'),
