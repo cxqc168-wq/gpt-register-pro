@@ -415,7 +415,9 @@ class BrowserService {
     }
 
     logInput(field, value, context = '') {
-        logInputValue(field, value, context);
+        const fieldName = String(field || '');
+        const safeValue = /password/i.test(fieldName) ? '[REDACTED]' : value;
+        logInputValue(field, safeValue, context);
     }
 
     async fillPasswordElement(input, password, logField, logTag) {
